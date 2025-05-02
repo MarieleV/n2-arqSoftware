@@ -34,29 +34,30 @@ A aplicação VídeosON (VO) é uma plataforma de streaming voltada para o consu
 
 ### Diagrama de Casos de Uso (Estilo ASCII)
 
-             ┌──────────────┐
-             │   Usuário    │
-             └──────┬───────┘
-                    │
-                    ▼
-       ┌─────────────────────┐
-       │   Validar Acesso    │◄─── include ───
-       └─────────────────────┘
-                    │
-        ┌────────────┼─────────────┐
-        ▼            ▼             ▼
-«Cadastrar Usuário»  «Consumir Vídeo»  «Visualizar Histórico»
-                             │
-              ┌──────────────┼──────────────┐
-              ▼              ▼              ▼
-     «Controlar Interrupção» «Verificar Vídeo Consumido»
+                                   ┌──────────────┐
+                                   │   Usuário    │
+                                   └──────┬───────┘
+                                          │
+                                          │
+                                          ▼
+                               ┌─────────────────────┐
+                               │   Validar Acesso    │◄─── include ───
+                               └─────────────────────┘
+                                          │
+                  ┌───────────────────────┼───────────────────────┐
+                  ▼                       ▼                       ▼
+          «Cadastrar Usuário»      «Consumir Vídeo»      «Visualizar Histórico»
+                                          │
+                        ┌─────────────────┼─────────────────┐
+                        ▼                                   ▼
+                «Controlar Interrupção»        «Verificar Vídeo Consumido»
 
-             ┌──────────────┐
-             │ Administrador│
-             └──────┬───────┘
-                    │
-                    ▼
-            «Publicar Vídeo»
+                                   ┌──────────────┐
+                                   │ Administrador│
+                                   └──────┬───────┘
+                                          │
+                                          ▼
+                                   «Publicar Vídeo»
 
 
 A solução proposta deverá garantir:
