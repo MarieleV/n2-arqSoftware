@@ -32,7 +32,7 @@ A aplicação VídeosON (VO) é uma plataforma de streaming voltada para o consu
 
 ![Diagrama da Macro](diagramas/teste/teste.svg)
 
-Diagrama de Casos de Uso (Estilo ASCII)
+### Diagrama de Casos de Uso (Estilo ASCII)
 
              ┌──────────────┐
              │   Usuário    │
