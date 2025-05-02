@@ -131,28 +131,28 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 
 ### Diagrama de Casos de Uso (ASCII)
 
-                                       ┌──────────────┐
-                                       │   Cliente    │
-                                       └──────┬───────┘
-                                              │
-                                              ▼
-                                 ┌─────────────────────┐
-                                 │     Validar Acesso  │ ◄──────────── include ──────────┐
-                                 └─────────────────────┘                                 │
-                                              │                                          │
-                  ┌───────────────────────────┼───────────────────────────┐              │
-                  ▼                           ▼                           ▼              │
-            «Cadastrar Usuário»           «Consumir Vídeo»  «Visualizar Histórico»       │
-                                                  │                                      │
-                             ┌────────────────────┼──────────────────────────────────┐   │
-                             ▼                                                       ▼   ▼
-                  «Verificar Vídeo Consumido»                             «Verificar Status da Assinatura»
-                       ▲                                                               │
-                       │                                                               ▼
-            «Controlar Interrupção»                                     «Restringir Consumo de Vídeos»
-                                                                                       │
-                                                                                       ▼
-                                                                          «Liberar Acesso Ilimitado»
+                                           ┌──────────────┐
+                                           │   Cliente    │
+                                           └──────┬───────┘
+                                                  │
+                                                  ▼
+                                     ┌───────────────────────┐
+                                     │     Validar Acesso    │ ◄──────────── include ──────────┐
+                                     └───────────────────────┘                                 │
+                                                  │                                            │
+                      ┌───────────────────────────┼───────────────────────────┐                │
+                      ▼                           ▼                           ▼                │
+                «Cadastrar Usuário»        «Consumir Vídeo»     «Visualizar Histórico»         │
+                                                      │                                        │
+                                 ┌────────────────────┼──────────────────────────────────┐     │
+                                 ▼                                                       ▼     ▼
+                      «Verificar Vídeo Consumido»                             «Verificar Status da Assinatura»
+                                 ▲                                                          │
+                                 │                                                          ▼
+                    «Controlar Interrupção»                                  «Restringir Consumo de Vídeos»
+                                                                                            │
+                                                                                            ▼
+                                                                                «Liberar Acesso Ilimitado»
 
 
 
