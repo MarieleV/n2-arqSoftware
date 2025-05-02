@@ -32,7 +32,7 @@ A aplicação VídeosON (VO) é uma plataforma de streaming voltada para o consu
 
 ![Diagrama da Macro](diagramas/teste/teste.svg)
 
-### Diagrama de Casos de Uso (Estilo ASCII)
+### Diagrama de Casos de Uso (ASCII)
 
                                    ┌──────────────┐
                                    │   Usuário    │
@@ -102,7 +102,7 @@ A entrega dos vídeos será otimizada por meio de integração com serviços com
 | Notificações e UX            | Exibe mensagens informativas padronizadas (RNF2, RNF3, RNF4, RNF5)        |
 | Monitoramento e Tolerância   | Detecta falhas e garante tentativas de recuperação automáticas            |
 
-## Observações Finais
+### Observações Finais
 
 A arquitetura proposta prioriza a experiência do usuário, a robustez da entrega de conteúdo e a facilidade de manutenção e escalabilidade do sistema. A segmentação por módulos e o uso de microsserviços contribuem para a evolução contínua da aplicação, com mínimo impacto entre as funcionalidades.
 
@@ -128,6 +128,52 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 | RNF7   | Notificar o cliente sobre o status da assinatura via e-mail e interface. |
 | RNF8   | Garantir disponibilidade mínima de 99,9% no serviço de autenticação e cobrança. |
 | RNF9   | Registrar logs de eventos relacionados a pagamentos e acessos. |
+
+### Diagrama de Casos de Uso (ASCII)
+
+                                       ┌──────────────┐
+                                       │   Cliente    │
+                                       └──────┬───────┘
+                                              │
+                                              ▼
+                                 ┌─────────────────────┐
+                                 │     Validar Acesso  │ ◄──────────── include ──────────┐
+                                 └─────────────────────┘                                 │
+                                              │                                          │
+                  ┌───────────────────────────┼───────────────────────────┐              │
+                  ▼                           ▼                           ▼              │
+            «Cadastrar Usuário»           «Consumir Vídeo»  «Visualizar Histórico»       │
+                                                  │                                      │
+                             ┌────────────────────┼──────────────────────────────────┐   │
+                             ▼                                                       ▼   ▼
+                  «Verificar Vídeo Consumido»                             «Verificar Status da Assinatura»
+                       ▲                                                               │
+                       │                                                               ▼
+            «Controlar Interrupção»                                     «Restringir Consumo de Vídeos»
+                                                                                       │
+                                                                                       ▼
+                                                                          «Liberar Acesso Ilimitado»
+
+
+
+                                       ┌─────────────────┐
+                                       │  Administrador  │
+                                       └────────┬────────┘
+                                                │
+                                                ▼
+                                  «Publicar ou Remover Vídeos»
+
+                                     ┌───────────────────────┐
+                                     │ Serviço de Pagamento  │
+                                     └───────────┬───────────┘
+                                                 ▼
+                                 «Processar Assinatura do Cliente»
+
+                                       ┌────────────────────┐
+                                       │ Serviço de E-mail  │
+                                       └─────────┬──────────┘
+                                                 ▼
+                                   «Notificar Status da Assinatura»
 
 ---
 
