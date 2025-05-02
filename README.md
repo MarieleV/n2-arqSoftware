@@ -1,6 +1,6 @@
-# Arquitetura de Software - VídeosON (VO) v-1.0
+# Arquitetura de Software - VídeosON (VO) 
 
-## Requisitos Funcionais e Não Funcionais
+## Requisitos Funcionais e Não Funcionais v-1.0
 
 Detalhamento dos requisitos da arquitetura da aplicação **VídeosON (VO)** que servem como base para a definição da estrutura do sistema, dos módulos funcionais e das tecnologias adotadas.
 
@@ -106,3 +106,45 @@ A entrega dos vídeos será otimizada por meio de integração com serviços com
 A arquitetura proposta prioriza a experiência do usuário, a robustez da entrega de conteúdo e a facilidade de manutenção e escalabilidade do sistema. A segmentação por módulos e o uso de microsserviços contribuem para a evolução contínua da aplicação, com mínimo impacto entre as funcionalidades.
 
 A integração com serviços externos como YouTube e o uso de CDN garantem o desempenho necessário para uma aplicação de streaming moderna. Os padrões adotados de autenticação e monitoramento asseguram a confiabilidade da solução.
+
+##  Requisitos da Versão v-2.0
+
+### Requisitos Funcionais (RF) – Novos
+
+| Código | Descrição |
+|--------|-----------|
+| RF8    | Permitir que o cliente selecione entre assinatura mensal ou anual. |
+| RF9    | Integrar com serviço externo de pagamento para processar assinaturas. |
+| RF10   | Controlar o status da assinatura do cliente (ativa, inativa, vencida). |
+| RF11   | Restringir o consumo de vídeos a um por mês para usuários sem assinatura. |
+| RF12   | Liberar acesso irrestrito a vídeos para clientes com assinatura ativa. |
+
+###  Requisitos Não Funcionais (RNF) – Novos
+
+| Código | Descrição |
+|--------|-----------|
+| RNF6   | Garantir integração segura com o serviço de pagamento via HTTPS e tokens. |
+| RNF7   | Notificar o cliente sobre o status da assinatura via e-mail e interface. |
+| RNF8   | Garantir disponibilidade mínima de 99,9% no serviço de autenticação e cobrança. |
+| RNF9   | Registrar logs de eventos relacionados a pagamentos e acessos. |
+
+---
+
+#  Modelo C4 – Sistema VO 2.0
+
+##  Nível 1: Diagrama de Contexto
+
+
+**Descrição:**  
+- Cliente acessa vídeos com base em sua assinatura.  
+- Sistema VO interage com serviço de pagamento.  
+- Administrador publica vídeos.  
+- Notificações automáticas são disparadas via e-mail.
+
+##  Nível 2: Diagrama de Containers
+
+
+
+##  Nível 3: Diagrama de Componentes (exemplo: Serviço de Assinaturas)
+
+##  Nível 4: Diagrama Dynamic
