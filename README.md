@@ -30,6 +30,8 @@ Detalhamento dos requisitos da arquitetura da aplicação **VídeosON (VO)** que
 
 A aplicação VídeosON (VO) é uma plataforma de streaming voltada para o consumo e gerenciamento de vídeos sob demanda. Os usuários finais (clientes) poderão se cadastrar, autenticar e consumir vídeos por meio da aplicação, enquanto administradores terão a capacidade de publicar e organizar os conteúdos. A aplicação deve proporcionar uma experiência de uso fluida, segura e escalável, garantindo o cumprimento de requisitos funcionais e não funcionais.
 
+![Diagrama da Macro](diagramas/teste/teste.svg)
+
 A solução proposta deverá garantir:
 
 - Cadastro e autenticação de clientes com segurança e controle de sessões.
