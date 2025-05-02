@@ -32,6 +32,33 @@ A aplicação VídeosON (VO) é uma plataforma de streaming voltada para o consu
 
 ![Diagrama da Macro](diagramas/teste/teste.svg)
 
+Diagrama de Casos de Uso (Estilo ASCII)
+
+             ┌──────────────┐
+             │   Usuário    │
+             └──────┬───────┘
+                    │
+                    ▼
+       ┌─────────────────────┐
+       │   Validar Acesso    │◄─── include ───
+       └─────────────────────┘
+                    │
+        ┌────────────┼─────────────┐
+        ▼            ▼             ▼
+«Cadastrar Usuário»  «Consumir Vídeo»  «Visualizar Histórico»
+                             │
+              ┌──────────────┼──────────────┐
+              ▼              ▼              ▼
+     «Controlar Interrupção» «Verificar Vídeo Consumido»
+
+             ┌──────────────┐
+             │ Administrador│
+             └──────┬───────┘
+                    │
+                    ▼
+            «Publicar Vídeo»
+
+
 A solução proposta deverá garantir:
 
 - Cadastro e autenticação de clientes com segurança e controle de sessões.
