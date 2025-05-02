@@ -2,7 +2,7 @@
 
 ## Requisitos Funcionais e Não Funcionais
 
-Detalhamento da aplicação de requisitos da arquitetura **VídeosON (VO)** que orientam a estrutura, os módulos a serem implementados e as tecnologias escolhidas.
+Detalhamento dos requisitos da arquitetura da aplicação **VídeosON (VO)** que servem como base para a definição da estrutura do sistema, dos módulos funcionais e das tecnologias adotadas.
 
 ### Requisitos Funcionais (RF)
 
