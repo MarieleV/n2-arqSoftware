@@ -1,2 +1,54 @@
 # n2-arqSoftware
-huhopp
+# Arquitetura de Software - VídeosON (VO)
+
+## Visão Geral - Macro da Aplicação
+
+A aplicação VídeosON (VO) é uma plataforma de streaming voltada para o consumo e gerenciamento de vídeos sob demanda. Os usuários finais (clientes) poderão se cadastrar, autenticar e consumir vídeos por meio da aplicação, enquanto administradores terão a capacidade de publicar e organizar os conteúdos. A aplicação deve proporcionar uma experiência de uso fluida, segura e escalável, garantindo o cumprimento de requisitos funcionais e não funcionais.
+
+A solução proposta deverá garantir:
+
+- Cadastro e autenticação de clientes com segurança e controle de sessões.
+- Disponibilização de vídeos com verificação de consumo anterior.
+- Tolerância a falhas e reinicialização em caso de erros durante a reprodução.
+- Administração do conteúdo por meio de funcionalidades exclusivas para administradores.
+- Interface padronizada, responsiva e orientada a práticas de UX Design.
+- Monitoramento ativo do desempenho e das falhas da aplicação.
+
+## Visão Tecnológica
+
+### Estilo de Arquitetura
+
+A arquitetura será orientada a microsserviços, permitindo a escalabilidade horizontal da aplicação e a separação clara de responsabilidades entre os componentes. A comunicação entre os serviços será realizada por meio de APIs REST e, para eventos críticos como falhas de execução, será adotada arquitetura orientada a eventos (Event-Driven Architecture).
+
+A entrega dos vídeos será otimizada por meio de integração com serviços como YouTube (atendendo aos requisitos de resolução e proporção) e o uso de CDN (Content Delivery Network) para reduzir latência.
+
+### Tecnologias e Ferramentas
+
+| Camada              | Tecnologias                                 | Descrição                                                                 |
+|---------------------|---------------------------------------------|---------------------------------------------------------------------------|
+| Frontend            | React.js ou Vue.js                          | Desenvolvimento da interface de usuário responsiva                       |
+| Backend             | Node.js (NestJS) ou Spring Boot             | Processamento de regras de negócio, autenticação e APIs REST             |
+| Banco de Dados      | MySQL ou PostgreSQL                         | Armazenamento de usuários, vídeos e históricos de consumo                |
+| Cache               | Redis                                       | Otimização de desempenho em acessos frequentes                           |
+| Autenticação        | JWT (JSON Web Token)                        | Controle seguro e escalável de sessões                                   |
+| Mensageria          | RabbitMQ ou Apache Kafka                    | Comunicação assíncrona entre microsserviços                              |
+| Streaming           | API do YouTube + CDN                        | Entrega de vídeos com base em RNF1 e performance otimizada               |
+| Monitoramento       | Prometheus e Grafana                        | Acompanhamento de falhas, latência e outros indicadores                  |
+| Infraestrutura      | Docker, Kubernetes (opcional), GitHub Actions | Containerização, CI/CD, automação de deploy                             |
+
+### Módulos e Componentes
+
+| Módulo                        | Responsabilidade                                                          |
+|------------------------------|---------------------------------------------------------------------------|
+| Cadastro e Autenticação      | Gerencia criação de contas e acesso de clientes (RF1, RF2)                |
+| Consumo de Vídeos            | Gerencia reprodução, interrupções e verificações de consumo (RF3, RF4, RF5, RF6) |
+| Administração de Conteúdo    | Permite a publicação e exclusão de vídeos por administradores (RF7)       |
+| Histórico de Consumo         | Registra e apresenta os vídeos já assistidos pelo cliente                 |
+| Notificações e UX            | Exibe mensagens informativas padronizadas (RNF2, RNF3, RNF4, RNF5)        |
+| Monitoramento e Tolerância   | Detecta falhas e garante tentativas de recuperação automáticas            |
+
+## Observações Finais
+
+A arquitetura proposta prioriza a experiência do usuário, a robustez da entrega de conteúdo e a facilidade de manutenção e escalabilidade do sistema. A segmentação por módulos e o uso de microsserviços contribuem para a evolução contínua da aplicação, com mínimo impacto entre as funcionalidades.
+
+A integração com serviços externos como YouTube e o uso de CDN garantem o desempenho necessário para uma aplicação de streaming moderna. Os padrões adotados de autenticação e monitoramento asseguram a confiabilidade da solução.

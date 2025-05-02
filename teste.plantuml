@@ -1,25 +1,36 @@
 @startuml teste 
 
-!include <c4/C4_Context.puml>  
+actor Usuario
+actor Administrador
 
-'ref http://plantuml.com/stdlib
-!include <office/Users/user.puml>
-!include <office/Users/mobile_user.puml>
+rectangle "VídeosON - VO" {
+(Cadastro de Usuário) as RF1
+(Login e Autenticação) as RF2
+(Consumo de Vídeos) as RF3
+(Controle de Interrupção) as RF4
+(Verificação de Histórico) as RF5
+(Consulta de Histórico) as RF6
+(Publicação de Vídeos) as RF7
+}
 
-'LAYOUT_WITH_LEGEND
+Usuario -- RF1
+Usuario -- RF2
+Usuario -- RF3
+Usuario -- RF4
+Usuario -- RF5
+Usuario -- RF6
+Administrador -- RF7
 
-title System Context diagram for Internet Banking System
+note right of RF5
+Se vídeo já foi consumido, informar o usuário.
+end note
 
-Person(customer  , Customer , "<$user> <$mobile_user>\n A customer of the bank, with personal bank accounts" )
+note right of RF2
+Validação de usuário e senha
+end note
 
-System(banking_system, "Internet Banking System", "Allows customers to view information about their bank accounts, and make payments.")
-
-System_Ext(mail_system, "E-mail system", "The internal Microsoft Exchange e-mail system.")
-System_Ext(mainframe, "Mainframe Banking System", "Stores all of the core banking information about customers, accounts, transactions, etc.")
-
-Rel(customer, banking_system, "Uses")
-Rel_Back(customer, mail_system, "Sends e-mails to")
-Rel_Neighbor(banking_system, mail_system, "Sends e-mails", "SMTP")
-Rel(banking_system, mainframe, "Uses")
+note right of RF4
+Pode ser interrupção manual ou por falha do sistema
+end note
 
 @enduml
