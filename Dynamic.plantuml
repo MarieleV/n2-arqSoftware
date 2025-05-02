@@ -1,0 +1,24 @@
+@startuml
+!include <c4/C4_Dynamic.puml>
+
+title Diagrama de Código - SubscriptionService - VídeosON 2.0
+
+Person(user, "Cliente")
+System_Ext(payment_gateway, "Gateway de Pagamento (ex: Stripe)")
+ContainerDb(database, "Banco de Dados", "Armazena usuários, assinaturas e logs")
+
+Component(subscription_controller, "SubscriptionController", "REST Controller", "Recebe requisições do frontend para gerenciar planos de assinatura.")
+Component(subscription_service, "SubscriptionService", "Classe de Serviço", "Orquestra validações e integração com o gateway.")
+Component(subscription_validator, "SubscriptionValidator", "Classe utilitária", "Valida regras de negócio sobre assinaturas.")
+Component(payment_adapter, "PaymentAdapter", "Classe de Integração", "Comunica-se com o serviço externo de pagamento.")
+Component(subscription_repository, "SubscriptionRepository", "Repositório", "Acessa os dados das assinaturas no banco de dados.")
+
+Rel(user, subscription_controller, "Solicita criação ou verificação de assinatura", "JSON/HTTPS")
+Rel(subscription_controller, subscription_service, "Invoca")
+Rel(subscription_service, subscription_validator, "Valida assinatura")
+Rel(subscription_service, payment_adapter, "Solicita cobrança ou consulta", "HTTPS")
+Rel(subscription_service, subscription_repository, "Consulta/Atualiza dados")
+Rel(subscription_repository, database, "Lê/Grava dados")
+Rel(payment_adapter, payment_gateway, "Realiza operações financeiras", "HTTPS")
+
+@enduml

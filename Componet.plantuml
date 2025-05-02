@@ -1,0 +1,45 @@
+@startuml
+!include <c4/C4_Component.puml>  
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Componentes - Sistema VídeosON 2.0 - API Backend
+
+Container(spa, "Frontend SPA", "JavaScript (React.js ou Vue.js)", "Interface que consome as APIs para exibir e interagir com os dados.")
+ContainerDb(db, "Banco de Dados", "MySQL ou PostgreSQL", "Armazena informações dos usuários, vídeos e status de assinaturas.")
+System_Ext(payment_api, "Gateway de Pagamento", "Serviço externo (ex: Stripe)", "Realiza o processamento dos pagamentos das assinaturas.")
+System_Ext(email_service, "Serviço de E-mail", "SendGrid / SMTP", "Envia notificações e confirmações de assinatura para os clientes.")
+System_Ext(monitoring_tool, "Sistema de Monitoramento", "Prometheus/Grafana", "Monitora métricas e eventos de falha.")
+
+Container_Boundary(api, "API Backend - Node.js (NestJS)") {
+
+    Component(auth_controller, "AuthController", "REST Controller", "Controla login, cadastro e validação de token JWT.")
+    Component(video_controller, "VideoController", "REST Controller", "Controla o consumo e o registro de vídeos assistidos.")
+    Component(admin_controller, "AdminController", "REST Controller", "Gerencia vídeos (publicação e exclusão).")
+    Component(subscription_controller, "SubscriptionController", "REST Controller", "Gerencia o status de assinaturas e planos.")
+    Component(history_controller, "HistoryController", "REST Controller", "Consulta e grava histórico de consumo.")
+    
+    Component(auth_service, "AuthService", "Serviço", "Valida credenciais, gera tokens e protege endpoints.")
+    Component(video_service, "VideoService", "Serviço", "Aplica regras de negócio para vídeos, interrupções e limites mensais.")
+    Component(subscription_service, "SubscriptionService", "Serviço", "Interage com o gateway de pagamento e valida status de assinatura.")
+    Component(email_service_comp, "EmailService", "Serviço", "Envia notificações e alertas por e-mail.")
+    Component(log_monitor_service, "MonitoringService", "Serviço", "Emite métricas e logs para Prometheus/Grafana.")
+    
+    Rel(auth_controller, auth_service, "Utiliza")
+    Rel(video_controller, video_service, "Utiliza")
+    Rel(admin_controller, video_service, "Utiliza")
+    Rel(subscription_controller, subscription_service, "Utiliza")
+    Rel(history_controller, video_service, "Consulta histórico")
+    
+    Rel(auth_service, db, "Lê/Grava dados de usuários", "JDBC/ORM")
+    Rel(video_service, db, "Lê/Grava vídeos e histórico", "JDBC/ORM")
+    Rel(subscription_service, payment_api, "Realiza cobranças e valida assinaturas", "HTTPS/JSON")
+    Rel(email_service_comp, email_service, "Envia e-mails", "SMTP/API")
+    Rel(log_monitor_service, monitoring_tool, "Envia métricas e logs", "HTTP")
+}
+
+Rel(spa, auth_controller, "Usa", "JSON/HTTPS")
+Rel(spa, video_controller, "Usa", "JSON/HTTPS")
+Rel(spa, subscription_controller, "Usa", "JSON/HTTPS")
+
+@enduml
