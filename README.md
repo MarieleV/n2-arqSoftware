@@ -181,6 +181,7 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 
 ##  Nível 1: Diagrama de Contexto
 
+![Texto alternativo da imagem](caminho/para/imagem.jpg)
 
 *Explicação:*
 - Cliente e Administrador interagem com a Plataforma Web.
@@ -189,6 +190,7 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 
 ##  Nível 2: Diagrama de Containers
 
+![Texto alternativo da imagem](caminho/para/imagem.jpg)
 
 *Explicação:*
 - **Web Application:** Interface acessada pelos usuários via navegador, feita com React.js ou Vue.js.
@@ -201,6 +203,7 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 
 ##  Nível 3: Diagrama de Componentes (exemplo: Serviço de Assinaturas)
 
+![Texto alternativo da imagem](caminho/para/imagem.jpg)
 
 *Explicação:*
 - **API Application:** O backend que gerencia autenticação, vídeos e assinaturas.
