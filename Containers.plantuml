@@ -1,7 +1,7 @@
 @startuml
 
 '!includeurl C:\Users\silva\Desktop\n2-arq\n2-arqSoftware\C4-PlantUML
-!include <c4/C4_Container.puml>  
+!include <c4/C4_Container.puml>
 ' Definindo o sistema principal
 
 
@@ -23,7 +23,7 @@ Container(apiCliente, "API Cliente", "Node.js (NestJS)", "Regras de negócio e a
 
 
 ' Infraestrutura
-Container(db, "Banco de Dados", "MySQL", "Armazena usuários, vídeos, históricos e status de assinatura.")
+ContainerDb(db, "Banco de Dados", "MySQL", "Armazena usuários, vídeos, históricos e status de assinatura.")
 Container(cache, "Cache", "Redis", "Armazena sessões e acessos frequentes.")
 Container(mq, "Mensageria", "RabbitMQ ou Kafka", "Comunicação assíncrona entre serviços.")
 Container(monitoramento, "Monitoramento", "Prometheus + Grafana", "Métricas, logs e alertas.")
