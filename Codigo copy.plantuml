@@ -1,0 +1,93 @@
+@startuml
+!define C4P https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master
+!includeurl C4P/C4_Component.puml
+!includeurl C4P/C4_Context.puml
+
+title Sistema VO - Diagrama de Código (Nível 4)
+
+' === Política de Acesso ===
+Package("PoliticaAcesso API") {
+    class AuthController {
+        +login(UserCredentials): JwtToken
+        +validateToken(token: JwtToken): boolean
+    }
+
+    class JWTService {
+        +generateToken(user: User): String
+        +validateToken(token: String): Claims
+    }
+
+    class UserRepository {
+        +findByEmail(email: String): User
+        +save(user: User): void
+    }
+
+    class User {
+        -id: Long
+        -email: String
+        -passwordHash: String
+        -roles: List<String>
+    }
+
+    AuthController --> JWTService : usa
+    JWTService --> UserRepository : consulta/salva
+    UserRepository --> User : persiste
+}
+
+' === Validação de Vídeo ===
+Package("ValidacaoVideo API") {
+    class VideoValidationController {
+        +uploadVideo(file: MultipartFile): VideoMetadata
+        +validateVideo(video: VideoMetadata): boolean
+    }
+
+    class YouTubeValidator {
+        +checkCopyright(title: String): boolean
+        +checkResolution(video: VideoFile): boolean
+    }
+
+    class VideoRepository {
+        +save(meta: VideoMetadata): void
+        +findById(id: UUID): VideoMetadata
+    }
+
+    class VideoMetadata {
+        -id: UUID
+        -title: String
+        -uploaderId: Long
+        -url: String
+        -timestamp: DateTime
+    }
+
+    VideoValidationController --> YouTubeValidator : chama
+    VideoValidationController --> VideoRepository : armazena
+    VideoRepository --> VideoMetadata : persiste
+}
+
+' === Distribuição de Vídeos ===
+Package("DistribVideos API") {
+    class VideoStreamingController {
+        +streamVideo(id: UUID): StreamingResponseBody
+    }
+
+    class CDNService {
+        +getVideoUrl(id: UUID): String
+        +cacheVideo(video: VideoFile): void
+    }
+
+    class HistoryRepository {
+        +logView(view: ViewHistory): void
+    }
+
+    class ViewHistory {
+        -userId: Long
+        -videoId: UUID
+        -timestamp: DateTime
+    }
+
+    VideoStreamingController --> CDNService : obtém vídeo
+    VideoStreamingController --> HistoryRepository : registra view
+    HistoryRepository --> ViewHistory : persiste
+}
+
+@enduml

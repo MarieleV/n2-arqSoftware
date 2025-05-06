@@ -1,0 +1,44 @@
+@startuml
+!define DeploymentUML https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master
+!includeurl DeploymentUML/C4_Deployment.puml
+
+LAYOUT_WITH_LEGEND()
+
+' Navegador e Web App
+Node(browser, "Navegador do Usuário", "Browser") {
+    Container(webApp, "Página Web React", "React.js", "Interface que consome APIs")
+}
+
+' Load Balancer
+Node(lb, "Load Balancer", "Nginx / AWS ALB", "Distribui requisições") {
+}
+
+' Cluster Kubernetes
+Node(cluster, "Cluster Kubernetes", "K8s", "Infraestrutura para APIs") {
+    Container(apiGateway, "API Gateway", "Spring Cloud Gateway", "Roteia requisições")
+    Container(apiAccess, "PoliticaAcesso API", "Spring Boot", "Gerencia autenticação e tokens")
+    Container(apiValid, "ValidaçãoVídeo API", "Spring Boot", "Valida e processa vídeos")
+    Container(apiStream, "DistribVideos API", "Spring Boot/CDN", "Distribui e registra histórico")
+}
+
+' Banco de Dados
+Node(databases, "Servidores de Banco de Dados", "") {
+    ContainerDb(pg, "PostgreSQL", "Banco Relacional", "Armazena dados de usuários")
+    ContainerDb(cassandra, "Cassandra", "Banco NoSQL", "Metadados e histórico de vídeos")
+    Container(cdn, "CDN", "Serviço de distribuição", "Entrega rápida de vídeos")
+}
+
+' Conexões
+Rel(browser, webApp, "Acessa via HTTPS")
+Rel(webApp, lb, "Encaminha requisições")
+Rel(lb, apiGateway, "Roteia requisições")
+Rel(apiGateway, apiAccess, "Chama /auth")
+Rel(apiGateway, apiValid, "Chama /validate")
+Rel(apiGateway, apiStream, "Chama /stream")
+
+Rel(apiAccess, pg, "Consulta e armazena usuários")
+Rel(apiValid, cassandra, "Armazena metadados")
+Rel(apiStream, cassandra, "Grava histórico")
+Rel(apiStream, cdn, "Distribui vídeos")
+
+@enduml

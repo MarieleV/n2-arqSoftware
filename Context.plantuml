@@ -1,17 +1,36 @@
 @startuml
-!include <c4/C4_Context.puml>
+!include <c4/C4_Context.puml>  
+!include <office/Users/user.puml>
+!include <office/Users/mobile_user.puml>
 
-title Diagrama de Contexto - Sistema VídeosON (VO) 2.0
+LAYOUT_WITH_LEGEND()
+title Diagrama de Contexto – VídeosON (VO) 2.0
 
-Person(cliente, "Cliente", "Usuário da plataforma que consome vídeos sob demanda e realiza assinatura.")
-Person(admin, "Administrador", "Responsável pela publicação e organização de conteúdos.")
-System(system_vo, "Sistema VídeosON (VO)", "Plataforma de streaming de vídeos com controle de assinaturas.")
-System_Ext(payment_gateway, "Serviço de Pagamento", "Serviço externo para processar pagamentos (ex: Stripe, PayPal).")
-System_Ext(email_service, "Serviço de E-mail", "Sistema externo usado para envio de notificações (e-mails).")
+Person(cliente, "Cliente", "<$user> <$mobile_user>\nUsuário final que consome vídeos sob demanda e gerencia sua assinatura.")
+Person(admin, "Administrador", "Usuário responsável pela publicação e remoção de vídeos.")
+System_Boundary(s1, "Sistema VídeosON (VO)") {
+    System(vo_web, "Plataforma Web VO", "Interface de uso para clientes e administradores.")
+    System(vo_api, "API VO", "Backend responsável pela lógica de negócio, autenticação, reprodução e controle de assinatura.")
+}
 
-Rel(cliente, system_vo, "Assiste vídeos, realiza assinatura e autenticação")
-Rel(admin, system_vo, "Gerencia conteúdos da plataforma")
-Rel(system_vo, payment_gateway, "Processa pagamentos e verifica status de assinatura", "HTTPS/REST")
-Rel(system_vo, email_service, "Envia notificações por e-mail", "SMTP")
+System_Ext(youtube, "YouTube", "Serviço externo de streaming para entrega dos vídeos.")
+System_Ext(cdnetwork, "CDN", "Rede de entrega de conteúdo para melhorar a performance dos vídeos.")
+System_Ext(payments, "Serviço de Pagamento", "Serviço externo utilizado para processar pagamentos de assinaturas.")
+System_Ext(email_service, "Serviço de E-mail", "Sistema de envio de notificações automáticas aos clientes.")
+
+Rel(cliente, vo_web, "Acessa via navegador ou app")
+Rel(admin, vo_web, "Gerencia vídeos")
+Rel(vo_web, vo_api, "Faz requisições para")
+Rel(vo_api, youtube, "Reproduz vídeos de")
+Rel(vo_api, cdnetwork, "Utiliza CDN para entrega rápida")
+Rel(vo_api, payments, "Processa pagamentos via")
+Rel(vo_api, email_service, "Envia notificações via")
+
+Lay_D(cliente, vo_web)
+Lay_D(admin, vo_web)
+Lay_U(youtube, vo_api)
+Lay_U(cdnetwork, vo_api)
+Lay_U(payments, vo_api)
+Lay_U(email_service, vo_api)
 
 @enduml

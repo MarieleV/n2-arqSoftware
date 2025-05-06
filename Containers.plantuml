@@ -1,58 +1,36 @@
 @startuml
+'!includeurl C:\Users\silva\Desktop\n2-arq\n2-arqSoftware\C4-PlantUML
 !include <c4/C4_Container.puml>  
 
 LAYOUT_WITH_LEGEND()
 
-title Diagrama de Containers - Sistema VídeosON (VO) 2.0
+title Diagrama de Container - VídeosON (VO) 2.0
 
-Person(cliente, "Cliente", "Usuário que consome vídeos e gerencia sua assinatura.")
-Person(admin, "Administrador", "Gerencia os vídeos disponíveis na plataforma.")
+Person(cliente, "Cliente", "Usuário que consome vídeos e gerencia a sua assinatura.")
+Person(administrador, "Administrador", "Usuário responsável por gerenciar vídeos e administrar o conteúdo.")
 
-System_Boundary(vo, "Sistema VídeosON") {
-
-    Container(web_app, "Aplicação Web", "React.js / Vue.js", 
-        "Interface web responsiva que permite aos usuários acessarem o sistema.")
-    
-    Container(mobile_app, "Aplicação Mobile (opcional)", "React Native", 
-        "Versão adaptada da aplicação para dispositivos móveis.")
-    
-    Container(frontend, "Frontend SPA", "JavaScript", 
-        "Single Page Application responsável pela comunicação com o backend via APIs.")
-    
-    Container(api_backend, "API Backend", "Node.js (NestJS) ou Spring Boot", 
-        "Fornece as APIs REST, autenticação, lógica de negócio e orquestração de serviços.")
-    
-    ContainerDb(db, "Banco de Dados", "MySQL ou PostgreSQL", 
-        "Armazena dados de usuários, vídeos, históricos de consumo e status de assinatura.")
-    
-    Container(cache, "Cache", "Redis", 
-        "Armazena sessões e dados frequentemente acessados para melhorar desempenho.")
-    
-    Container(queue, "Mensageria", "RabbitMQ / Kafka", 
-        "Gerencia eventos assíncronos como notificações e logs de reprodução.")
-    
-    Container(external_api, "API de Pagamento", "Serviço externo (ex: Stripe)", 
-        "Processa pagamentos das assinaturas dos clientes.")
-    
-    Container(monitoring, "Monitoramento", "Prometheus + Grafana", 
-        "Coleta métricas e monitora falhas, desempenho e disponibilidade.")
-
-    Container(email_service, "Serviço de E-mail", "SMTP / SendGrid", 
-        "Envia notificações aos usuários e confirmações de pagamento.")
+System_Boundary(s1, "VídeosON (VO)") {
+    Container(web_app, "Web Application", "React.js ou Vue.js", "Interface de usuário responsiva para acesso aos vídeos.")
+    Container(mobile_app, "Mobile App", "React Native ou Flutter", "Aplicativo móvel para consumo de vídeos e gerenciamento de assinatura.")
+    Container(api_backend, "Backend API", "Node.js (NestJS) ou Spring Boot", "Processa a lógica de negócio, autenticação, controle de assinatura e fornece APIs REST.")
+    Container(db, "Banco de Dados", "MySQL ou PostgreSQL", "Armazena dados de usuários, vídeos, histórico e status de assinatura.")
+    Container(auth_service, "Serviço de Autenticação", "JWT", "Gerencia autenticação segura de usuários.")
+    Container(payments_service, "Serviço de Pagamento", "API externa (PayPal, Stripe)", "Processa assinaturas e pagamentos dos clientes.")
+    Container(streaming_service, "Serviço de Streaming", "API do YouTube + CDN", "Entrega de vídeos com base em resolução e performance.")
 }
 
-Rel(cliente, web_app, "Acessa via navegador", "HTTPS")
-Rel(cliente, mobile_app, "Acessa via app mobile", "HTTPS")
-Rel(cliente, frontend, "Interage com", "HTTPS/REST")
-Rel(admin, frontend, "Gerencia conteúdo", "HTTPS")
+System_Ext(email_system, "Sistema de E-mail", "Sistema de e-mail para notificar clientes sobre status da assinatura.")
+System_Ext(payment_gateway, "Gateway de Pagamento", "Serviço de pagamento externo para processar assinaturas.")
 
-Rel(frontend, api_backend, "Faz chamadas para", "REST/JSON")
-Rel(api_backend, db, "Lê e grava dados em", "JDBC/ORM")
-Rel(api_backend, cache, "Consulta dados em", "Redis Protocol")
-Rel(api_backend, queue, "Publica eventos em", "AMQP/Kafka Protocol")
-Rel(api_backend, external_api, "Verifica e processa pagamentos", "HTTPS")
-Rel(api_backend, email_service, "Envia e-mails via", "SMTP/HTTP API")
-Rel(api_backend, monitoring, "Exposição de métricas para", "HTTP")
-Rel(queue, monitoring, "Envia eventos de falha e consumo")
+Rel(cliente, web_app, "Usa", "HTTPS")
+Rel(cliente, mobile_app, "Usa", "HTTPS")
+Rel_Neighbor(web_app, api_backend, "Se comunica com", "JSON/HTTPS")
+Rel(mobile_app, api_backend, "Se comunica com", "JSON/HTTPS")
+Rel(api_backend, db, "Lê e escreve", "JDBC")
+Rel(api_backend, auth_service, "Autentica", "JWT")
+Rel(api_backend, payments_service, "Processa pagamentos", "HTTPS")
+Rel(api_backend, streaming_service, "Entrega vídeos", "HTTPS")
+Rel(email_system, api_backend, "Envia notificações", "SMTP")
+Rel(api_backend, payment_gateway, "Processa pagamentos", "HTTPS")
 
 @enduml
