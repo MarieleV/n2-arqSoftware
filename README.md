@@ -182,16 +182,42 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 ##  Nível 1: Diagrama de Contexto
 
 
-**Descrição:**  
-- Cliente acessa vídeos com base em sua assinatura.  
-- Sistema VO interage com serviço de pagamento.  
-- Administrador publica vídeos.  
-- Notificações automáticas são disparadas via e-mail.
+*Explicação:*
+- Cliente e Administrador interagem com a Plataforma Web.
+- A plataforma se comunica com uma API backend para gerenciar tudo.
+- A API interage com YouTube/CDN (para vídeos), Serviço de Pagamento e Serviço de E-mail.
 
 ##  Nível 2: Diagrama de Containers
 
 
+*Explicação:*
+- **Web Application:** Interface acessada pelos usuários via navegador, feita com React.js ou Vue.js.
+- **Mobile App:** Aplicativo móvel para consumidores de vídeos, feito com React Native ou Flutter.
+- **API Backend:** Servidor de backend, responsável pela lógica de negócios, autenticação, controle de assinaturas e gerenciamento dos dados, feito com Node.js (NestJS) ou Spring Boot.
+- **Banco de Dados:** Armazena todos os dados críticos, como usuários, vídeos e status de assinatura, usando MySQL ou PostgreSQL.
+- **Serviço de Autenticação:** Usado para gerenciar a autenticação dos usuários com JWT.
+- **Serviço de Pagamento:** Serviço que lida com o processamento de pagamentos, como PayPal ou Stripe.
+- **Serviço de Streaming:** Lida com a entrega de vídeos aos usuários através da API do YouTube e CDN.
 
 ##  Nível 3: Diagrama de Componentes (exemplo: Serviço de Assinaturas)
+
+
+*Explicação:*
+- **API Application:** O backend que gerencia autenticação, vídeos e assinaturas.
+- **Banco de Dados:** Armazena informações dos usuários, vídeos, histórico e status da assinatura.
+- **Serviço de Streaming:** Utiliza a API do YouTube e uma CDN para entregar vídeos.
+- **Serviço de Pagamento:** Gerencia transações de pagamento por meio de integração com APIs externas (PayPal, Stripe).
+
+**Componentes dentro da API Application:**
+- Autenticação Controller: Gerencia o login e o registro de usuários.
+- Vídeos Controller: Gerencia a operação de listagem, reprodução e verificação de vídeos.
+- Assinatura Controller: Gerencia as assinaturas de clientes e status de pagamento.
+- Serviço de Pagamento: Interage com o gateway de pagamento para processar as assinaturas.
+- Streaming Facade: Interage com o serviço de streaming (YouTube + CDN) para entregar vídeos.
+
+**Relacionamentos:**
+- A comunicação entre os componentes da API é feita via JSON/HTTPS.
+- O Serviço de Pagamento interage com o gateway de pagamento através de HTTPS.
+- A comunicação com o Banco de Dados é feita via JDBC.
 
 ##  Nível 4: Diagrama Dynamic
