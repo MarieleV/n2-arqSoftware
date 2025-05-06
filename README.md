@@ -199,7 +199,9 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 - **Serviço de Pagamento:** Serviço que lida com o processamento de pagamentos, como PayPal ou Stripe.
 - **Serviço de Streaming:** Lida com a entrega de vídeos aos usuários através da API do YouTube e CDN.
 
-##  Nível 3: Diagrama de Componentes (exemplo: Serviço de Assinaturas)
+##  Nível 3: Diagrama de Componentes
+
+### Diagrama de Componentes – API Cliente
 
 ![Texto alternativo da imagem](diagramas/Componet/Componet.svg)
 
