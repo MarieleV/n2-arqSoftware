@@ -206,26 +206,34 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 ![Texto alternativo da imagem](diagramas/Componet/Componet-adm.svg)
 
 *Explicação:*
-- **API Application:** O backend que gerencia autenticação, vídeos e assinaturas.
-- **Banco de Dados:** Armazena informações dos usuários, vídeos, histórico e status da assinatura.
-- **Serviço de Streaming:** Utiliza a API do YouTube e uma CDN para entregar vídeos.
-- **Serviço de Pagamento:** Gerencia transações de pagamento por meio de integração com APIs externas (PayPal, Stripe).
+#### Componentes principais:
+- **AuthAdminController & AuthAdminService:** Gerenciam o login dos administradores, validação de credenciais e controle de sessões usando tokens JWT armazenados em Redis.
+- **VideoAdminController & VideoService:** Responsáveis pelas operações de gerenciamento de vídeos (upload, listagem e exclusão). Os vídeos são enviados via FTPSUploader, um componente dedicado ao envio seguro dos arquivos para o servidor de armazenamento.
+- **UserAdminController & UserService:** Permitem ao administrador visualizar e manipular informações dos usuários cadastrados na plataforma.
+- **EventPublisher:** Componente que publica eventos em uma fila de mensageria (RabbitMQ ou Kafka), permitindo o registro de logs, auditoria e integração com mecanismos de monitoramento.
+
+#### Integrações externas:
+- **Banco de Dados (MySQL):** Armazena os metadados dos vídeos, informações dos usuários e administradores.
+- **Redis (Cache):** Utilizado para armazenar sessões e autenticações temporárias.
+- **FTPS:** Canal seguro para upload dos arquivos de vídeo.
+- **RabbitMQ/Kafka:** Plataforma de mensageria para comunicação assíncrona e registro de eventos.
 
 ### Diagrama de Componentes – API Cliente
 
 ![Texto alternativo da imagem](diagramas/Componet/Componet-cliente.svg)
 
+*Explicação:*
+#### Componentes principais:
+- **AuthController & AuthService:** Controlam o fluxo de autenticação e registro dos clientes. Utilizam tokens JWT armazenados em cache (Redis) para sessões seguras e eficientes.
+- **VideoController & VideoService:** Responsáveis por listar e exibir os vídeos disponíveis. O serviço se comunica com uma StreamingFacade, que encapsula a lógica de integração com o provedor externo de vídeo (como YouTube/CDN).
+- **SubscriptionController & SubscriptionService:** Gerenciam a assinatura dos clientes, incluindo o status e o plano contratado. Utilizam o PaymentFacade para processar transações através de um gateway de pagamento (ex: Stripe ou PayPal).
+- **PaymentFacade:** Encapsula a lógica de integração com serviços externos de pagamento, permitindo a abstração de múltiplos provedores.
+- **StreamingFacade:** Facilita a comunicação com o sistema de streaming, requisitando vídeos conforme a demanda e qualidade de conexão.
 
-**Componentes dentro da API Application:**
-- Autenticação Controller: Gerencia o login e o registro de usuários.
-- Vídeos Controller: Gerencia a operação de listagem, reprodução e verificação de vídeos.
-- Assinatura Controller: Gerencia as assinaturas de clientes e status de pagamento.
-- Serviço de Pagamento: Interage com o gateway de pagamento para processar as assinaturas.
-- Streaming Facade: Interage com o serviço de streaming (YouTube + CDN) para entregar vídeos.
+#### Integrações externas:
+- **Banco de Dados (MySQL):** Armazena dados dos usuários, status da assinatura, e histórico de visualização.
+- **Redis (Cache):** Usado para armazenar sessões e dados de autenticação temporários.
+- **Gateway de Pagamento:** Responsável pelo processamento de cobranças.
+- **YouTube/CDN:** Responsável pela entrega de conteúdo em vídeo de forma escalável.
 
-**Relacionamentos:**
-- A comunicação entre os componentes da API é feita via JSON/HTTPS.
-- O Serviço de Pagamento interage com o gateway de pagamento através de HTTPS.
-- A comunicação com o Banco de Dados é feita via JDBC.
-
-##  Nível 4: Diagrama Dynamic
+##  Nível 4: Diagrama de Código
