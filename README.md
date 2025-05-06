@@ -201,15 +201,20 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 
 ##  Nível 3: Diagrama de Componentes
 
-### Diagrama de Componentes – API Assinatura
+### Diagrama de Componentes – API Adm
 
-![Texto alternativo da imagem](diagramas/Componet/Componet.svg)
+![Texto alternativo da imagem](diagramas/Componet/Componet-adm.svg)
 
 *Explicação:*
 - **API Application:** O backend que gerencia autenticação, vídeos e assinaturas.
 - **Banco de Dados:** Armazena informações dos usuários, vídeos, histórico e status da assinatura.
 - **Serviço de Streaming:** Utiliza a API do YouTube e uma CDN para entregar vídeos.
 - **Serviço de Pagamento:** Gerencia transações de pagamento por meio de integração com APIs externas (PayPal, Stripe).
+
+### Diagrama de Componentes – API Cliente
+
+![Texto alternativo da imagem](diagramas/Componet/Componet-cliente.svg)
+
 
 **Componentes dentro da API Application:**
 - Autenticação Controller: Gerencia o login e o registro de usuários.
