@@ -3,46 +3,56 @@
 '!includeurl C:\Users\silva\Desktop\n2-arq\n2-arqSoftware\C4-PlantUML
 !include <c4/C4_Container.puml>  
 ' Definindo o sistema principal
+
+
+' Atores externos
+Person(admin, "Administrador", "Responsável por publicar e remover vídeos.")
+Person(cliente, "Cliente", "Usuário final que consome vídeos e realiza assinatura.")
+
 System_Boundary(s1, "VídeosON (VO)") {
 
-  ' Atores externos
-  Person(cliente, "Cliente", "Usuário final que consome vídeos e realiza assinatura.")
-  Person(admin, "Administrador", "Responsável por publicar e remover vídeos.")
 
-  ' Containers internos
-  Container(frontend, "Frontend Web", "React.js", "Interface de uso para clientes.")
-  Container(adm_auth, "Adm Auth Service", "React Service", "Valida o acesso administrativo via HTTPS e JWT.")
-  Container(video_form, "Video Upload Form", "React Component", "Interface de envio de vídeos (HTTP).")
-  Container(backend, "Backend API", "Node.js (NestJS)", "Responsável por regras de negócio, autenticação e APIs REST.")
-  Container(db, "Banco de Dados", "MySQL", "Armazena informações de usuários, vídeos, histórico e assinaturas.")
-  Container(redis, "Cache", "Redis", "Cache de sessões e dados frequentes.")
-  Container(mq, "Mensageria", "RabbitMQ/Kafka", "Comunicação assíncrona entre serviços.")
-  Container(monitoramento, "Monitoramento", "Prometheus + Grafana", "Coleta métricas e monitora falhas.")
-  Container(sub_validator, "Subscription Validator Service", "Node.js", "Verifica status da assinatura do cliente via HTTPS e JWT.")
+' Admin - dividido com API unificada
+Container(webAcessoAdmin, "Página Web Acesso (Admin)", "React.js", "Tela de login do administrador.")
+Container(webAdm, "Página Web Administrativa", "React.js", "Interface administrativa para gerenciar vídeos.")
+Container(apiAdminUnificada, "API Administrativa", "Node.js (NestJS)", "Valida credenciais e gerencia vídeos e conteúdos administrativos.")
 
-  ' Conexões internas
-  Rel(cliente, frontend, "Usa")
-  Rel(admin, adm_auth, "Valida acesso administrativo")
-  Rel(admin, video_form, "Envia vídeos via HTTP")
-  Rel(frontend, backend, "Requisições HTTP (REST + JWT)")
-  Rel(frontend, sub_validator, "Valida status de assinatura (HTTPS + JWT)")
-  Rel(adm_auth, backend, "Valida e autentica tokens")
-  Rel(video_form, backend, "Envia dados de upload")
-  Rel(backend, db, "CRUD via ORM")
-  Rel(sub_validator, db, "Consulta status de assinatura")
-  Rel(backend, redis, "Consulta e atualização de cache")
-  Rel(backend, mq, "Publica eventos")
-  Rel(backend, monitoramento, "Envia métricas e logs")
+' Cliente
+Container(frontendCliente, "Frontend Cliente (Plano + Consumo)", "React.js", "Interface do cliente para assinatura e consumo de vídeos.")
+Container(apiCliente, "API Cliente", "Node.js (NestJS)", "Regras de negócio e autenticação do cliente.")
+
+
+' Infraestrutura
+Container(db, "Banco de Dados", "MySQL", "Armazena usuários, vídeos, históricos e status de assinatura.")
+Container(cache, "Cache", "Redis", "Armazena sessões e acessos frequentes.")
+Container(mq, "Mensageria", "RabbitMQ ou Kafka", "Comunicação assíncrona entre serviços.")
+Container(monitoramento, "Monitoramento", "Prometheus + Grafana", "Métricas, logs e alertas.")
 }
 
-' Serviços externos
-System_Ext(pagamento, "Serviço de Pagamento")
-System_Ext(email, "Serviço de E-mail")
-System_Ext(streaming, "YouTube/CDN")
+' Sistemas externos
+System_Ext(pagamento, "Serviço de Pagamento", "Plataforma de pagamento para processar assinaturas.")
+System_Ext(email, "Serviço de E-mail", "Envio de notificações de status de assinatura.")
+System_Ext(streaming, "YouTube/CDN", "Entrega de vídeos sob demanda.")
 
-Rel(backend, pagamento, "Processa pagamentos via HTTPS")
-Rel(backend, email, "Envia notificações de assinatura via API")
-Rel(frontend, streaming, "Consome vídeos via YouTube/CDN")
-Rel(sub_validator, pagamento, "Consulta status da assinatura")
+' Relacionamentos Cliente
+Rel(cliente, frontendCliente, "Acessa via navegador")
+Rel(frontendCliente, apiCliente, "Chama API REST (HTTPS + JWT)")
+Rel(apiCliente, db, "Consulta e atualização")
+Rel(apiCliente, cache, "Leitura/Escrita de cache")
+Rel(apiCliente, mq, "Publica e consome eventos")
+Rel(apiCliente, monitoramento, "Envia métricas e logs")
+Rel(apiCliente, pagamento, "Processa pagamentos via HTTPS")
+Rel(apiCliente, email, "Envia notificações")
+Rel(frontendCliente, streaming, "Carrega vídeos")
+
+' Relacionamentos Admin
+Rel(admin, webAcessoAdmin, "Acessa via navegador")
+Rel(webAcessoAdmin, apiAdminUnificada, "Chama API REST (HTTPS)")
+Rel(webAcessoAdmin, webAdm, "Deliver token-admin")
+Rel(webAdm, apiAdminUnificada, "Chama API REST (HTTPS + JWT)")
+Rel(apiAdminUnificada, db, "Consulta e atualização de vídeos e usuários")
+Rel(apiAdminUnificada, cache, "Leitura/Escrita de cache")
+Rel(apiAdminUnificada, mq, "Publica e consome eventos")
+Rel(apiAdminUnificada, monitoramento, "Envia métricas e logs")
 
 @enduml
