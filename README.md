@@ -30,8 +30,6 @@ Detalhamento dos requisitos da arquitetura da aplicação **VídeosON (VO)** que
 
 A aplicação VídeosON (VO) é uma plataforma de streaming voltada para o consumo e gerenciamento de vídeos sob demanda. Os usuários finais (clientes) poderão se cadastrar, autenticar e consumir vídeos por meio da aplicação, enquanto administradores terão a capacidade de publicar e organizar os conteúdos. A aplicação deve proporcionar uma experiência de uso fluida, segura e escalável, garantindo o cumprimento de requisitos funcionais e não funcionais.
 
-![Diagrama da Macro](diagramas/teste/teste.svg)
-
 ### Diagrama de Casos de Uso (ASCII)
 
                                    ┌──────────────┐
@@ -79,17 +77,17 @@ A entrega dos vídeos será otimizada por meio de integração com serviços com
 
 ### Tecnologias e Ferramentas
 
-| Camada              | Tecnologias                                 | Descrição                                                                 |
-|---------------------|---------------------------------------------|---------------------------------------------------------------------------|
-| Frontend            | React.js ou Vue.js                          | Desenvolvimento da interface de usuário responsiva                       |
-| Backend             | Node.js (NestJS) ou Spring Boot             | Processamento de regras de negócio, autenticação e APIs REST             |
-| Banco de Dados      | MySQL ou PostgreSQL                         | Armazenamento de usuários, vídeos e históricos de consumo                |
-| Cache               | Redis                                       | Otimização de desempenho em acessos frequentes                           |
-| Autenticação        | JWT (JSON Web Token)                        | Controle seguro e escalável de sessões                                   |
-| Mensageria          | RabbitMQ ou Apache Kafka                    | Comunicação assíncrona entre microsserviços                              |
-| Streaming           | API do YouTube + CDN                        | Entrega de vídeos com base em RNF1 e performance otimizada               |
-| Monitoramento       | Prometheus e Grafana                        | Acompanhamento de falhas, latência e outros indicadores                  |
-| Infraestrutura      | Docker, Kubernetes (opcional), GitHub Actions | Containerização, CI/CD, automação de deploy                             |
+| Camada              | Tecnologias                                   | Descrição                                                                |
+|---------------------|-----------------------------------------------|--------------------------------------------------------------------------|
+| Frontend            | React.js                                      | Desenvolvimento da interface de usuário responsiva                       |
+| Backend             | Node.js (NestJS)                              | Processamento de regras de negócio, autenticação e APIs REST             |
+| Banco de Dados      | MySQL                                         | Armazenamento de usuários, vídeos e históricos de consumo                |
+| Cache               | Redis                                         | Otimização de desempenho em acessos frequentes                           |
+| Autenticação        | JWT (JSON Web Token)                          | Controle seguro e escalável de sessões                                   |
+| Mensageria          | RabbitMQ ou Apache Kafka                      | Comunicação assíncrona entre microsserviços                              |
+| Streaming           | API do YouTube + CDN                          | Entrega de vídeos com base em RNF1 e performance otimizada               |
+| Monitoramento       | Prometheus e Grafana                          | Acompanhamento de falhas, latência e outros indicadores                  |
+| Infraestrutura      | Docker, Kubernetes (opcional), GitHub Actions | Containerização, CI/CD, automação de deploy                              |
 
 ### Módulos e Componentes
 
@@ -181,6 +179,7 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 
 ##  Nível 1: Diagrama de Contexto
 
+![Texto alternativo da imagem](diagramas/Context/Context.svg)
 
 *Explicação:*
 - Cliente e Administrador interagem com a Plataforma Web.
@@ -189,6 +188,7 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 
 ##  Nível 2: Diagrama de Containers
 
+![Texto alternativo da imagem](diagramas/Containers/Containers.svg)
 
 *Explicação:*
 - **Web Application:** Interface acessada pelos usuários via navegador, feita com React.js ou Vue.js.
@@ -201,6 +201,7 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 
 ##  Nível 3: Diagrama de Componentes (exemplo: Serviço de Assinaturas)
 
+![Texto alternativo da imagem](diagramas/Componet/Componet.svg)
 
 *Explicação:*
 - **API Application:** O backend que gerencia autenticação, vídeos e assinaturas.
