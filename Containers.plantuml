@@ -1,36 +1,48 @@
 @startuml
+
 '!includeurl C:\Users\silva\Desktop\n2-arq\n2-arqSoftware\C4-PlantUML
 !include <c4/C4_Container.puml>  
-
-LAYOUT_WITH_LEGEND()
-
-title Diagrama de Container - VídeosON (VO) 2.0
-
-Person(cliente, "Cliente", "Usuário que consome vídeos e gerencia a sua assinatura.")
-Person(administrador, "Administrador", "Usuário responsável por gerenciar vídeos e administrar o conteúdo.")
-
+' Definindo o sistema principal
 System_Boundary(s1, "VídeosON (VO)") {
-    Container(web_app, "Web Application", "React.js ou Vue.js", "Interface de usuário responsiva para acesso aos vídeos.")
-    Container(mobile_app, "Mobile App", "React Native ou Flutter", "Aplicativo móvel para consumo de vídeos e gerenciamento de assinatura.")
-    Container(api_backend, "Backend API", "Node.js (NestJS) ou Spring Boot", "Processa a lógica de negócio, autenticação, controle de assinatura e fornece APIs REST.")
-    Container(db, "Banco de Dados", "MySQL ou PostgreSQL", "Armazena dados de usuários, vídeos, histórico e status de assinatura.")
-    Container(auth_service, "Serviço de Autenticação", "JWT", "Gerencia autenticação segura de usuários.")
-    Container(payments_service, "Serviço de Pagamento", "API externa (PayPal, Stripe)", "Processa assinaturas e pagamentos dos clientes.")
-    Container(streaming_service, "Serviço de Streaming", "API do YouTube + CDN", "Entrega de vídeos com base em resolução e performance.")
+
+  ' Atores externos
+  Person(cliente, "Cliente", "Usuário final que consome vídeos e realiza assinatura.")
+  Person(admin, "Administrador", "Responsável por publicar e remover vídeos.")
+
+  ' Containers internos
+  Container(frontend, "Frontend Web", "React.js", "Interface de uso para clientes.")
+  Container(adm_auth, "Adm Auth Service", "React Service", "Valida o acesso administrativo via HTTPS e JWT.")
+  Container(video_form, "Video Upload Form", "React Component", "Interface de envio de vídeos (HTTP).")
+  Container(backend, "Backend API", "Node.js (NestJS)", "Responsável por regras de negócio, autenticação e APIs REST.")
+  Container(db, "Banco de Dados", "MySQL", "Armazena informações de usuários, vídeos, histórico e assinaturas.")
+  Container(redis, "Cache", "Redis", "Cache de sessões e dados frequentes.")
+  Container(mq, "Mensageria", "RabbitMQ/Kafka", "Comunicação assíncrona entre serviços.")
+  Container(monitoramento, "Monitoramento", "Prometheus + Grafana", "Coleta métricas e monitora falhas.")
+  Container(sub_validator, "Subscription Validator Service", "Node.js", "Verifica status da assinatura do cliente via HTTPS e JWT.")
+
+  ' Conexões internas
+  Rel(cliente, frontend, "Usa")
+  Rel(admin, adm_auth, "Valida acesso administrativo")
+  Rel(admin, video_form, "Envia vídeos via HTTP")
+  Rel(frontend, backend, "Requisições HTTP (REST + JWT)")
+  Rel(frontend, sub_validator, "Valida status de assinatura (HTTPS + JWT)")
+  Rel(adm_auth, backend, "Valida e autentica tokens")
+  Rel(video_form, backend, "Envia dados de upload")
+  Rel(backend, db, "CRUD via ORM")
+  Rel(sub_validator, db, "Consulta status de assinatura")
+  Rel(backend, redis, "Consulta e atualização de cache")
+  Rel(backend, mq, "Publica eventos")
+  Rel(backend, monitoramento, "Envia métricas e logs")
 }
 
-System_Ext(email_system, "Sistema de E-mail", "Sistema de e-mail para notificar clientes sobre status da assinatura.")
-System_Ext(payment_gateway, "Gateway de Pagamento", "Serviço de pagamento externo para processar assinaturas.")
+' Serviços externos
+System_Ext(pagamento, "Serviço de Pagamento")
+System_Ext(email, "Serviço de E-mail")
+System_Ext(streaming, "YouTube/CDN")
 
-Rel(cliente, web_app, "Usa", "HTTPS")
-Rel(cliente, mobile_app, "Usa", "HTTPS")
-Rel_Neighbor(web_app, api_backend, "Se comunica com", "JSON/HTTPS")
-Rel(mobile_app, api_backend, "Se comunica com", "JSON/HTTPS")
-Rel(api_backend, db, "Lê e escreve", "JDBC")
-Rel(api_backend, auth_service, "Autentica", "JWT")
-Rel(api_backend, payments_service, "Processa pagamentos", "HTTPS")
-Rel(api_backend, streaming_service, "Entrega vídeos", "HTTPS")
-Rel(email_system, api_backend, "Envia notificações", "SMTP")
-Rel(api_backend, payment_gateway, "Processa pagamentos", "HTTPS")
+Rel(backend, pagamento, "Processa pagamentos via HTTPS")
+Rel(backend, email, "Envia notificações de assinatura via API")
+Rel(frontend, streaming, "Consome vídeos via YouTube/CDN")
+Rel(sub_validator, pagamento, "Consulta status da assinatura")
 
 @enduml
