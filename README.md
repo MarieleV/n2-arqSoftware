@@ -201,7 +201,7 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 
 ##  Nível 3: Diagrama de Componentes
 
-### Diagrama de Componentes – API Cliente
+### Diagrama de Componentes – API Assinatura
 
 ![Texto alternativo da imagem](diagramas/Componet/Componet.svg)
 
