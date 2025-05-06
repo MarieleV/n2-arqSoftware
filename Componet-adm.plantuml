@@ -1,0 +1,48 @@
+@startuml
+
+!include <c4/C4_Component.puml> 
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Component - API Administrador - VídeosON (VO) 2.0
+
+Container(api_admin, "API Administrativa", "Node.js (NestJS)", "Gerencia acesso do administrador e operações sobre os vídeos.")
+ContainerDb(db, "Banco de Dados", "MySQL", "Armazena informações de vídeos, usuários e permissões.")
+Container(cache, "Cache", "Redis", "Armazena sessões administrativas.")
+Container(mq, "Mensageria", "RabbitMQ ou Kafka", "Comunicação assíncrona para logs e notificações.")
+Container(ftps, "Servidor FTPS", "Protocolo Seguro", "Recebe os arquivos de vídeo enviados pelos administradores.")
+
+Container_Boundary(api, "API Administrativa") {
+
+    Component(auth_admin_controller, "AuthAdminController", "NestJS Controller", "Gerencia login do administrador e geração de token.")
+    Component(video_admin_controller, "VideoAdminController", "NestJS Controller", "Gerencia upload, listagem e exclusão de vídeos.")
+    Component(user_admin_controller, "UserAdminController", "NestJS Controller", "Visualiza e gerencia dados de usuários.")
+
+    Component(auth_admin_service, "AuthAdminService", "NestJS Service", "Valida credenciais e controla sessões de admin.")
+    Component(video_service, "VideoService", "NestJS Service", "Regras para gerenciamento de vídeos.")
+    Component(user_service, "UserService", "NestJS Service", "Consulta e manutenção de dados dos usuários.")
+    
+    Component(ftps_uploader, "FTPSUploader", "NestJS Service", "Realiza upload dos arquivos de vídeo via FTPS.")
+    Component(event_publisher, "EventPublisher", "NestJS Service", "Publica eventos em fila para logs e monitoramento.")
+
+    Rel(auth_admin_controller, auth_admin_service, "Usa")
+    Rel(video_admin_controller, video_service, "Usa")
+    Rel(user_admin_controller, user_service, "Usa")
+    
+    Rel(auth_admin_service, db, "Consulta admins")
+    Rel(auth_admin_service, cache, "Armazena sessão JWT")
+
+    Rel(video_service, db, "Cria e remove metadados de vídeo")
+    Rel(video_service, ftps_uploader, "Faz upload dos arquivos")
+    Rel(video_service, event_publisher, "Publica eventos")
+
+    Rel(user_service, db, "Consulta dados dos usuários")
+    Rel(event_publisher, mq, "Publica mensagens")
+
+}
+
+Rel(api_admin, auth_admin_controller, "Usa", "JSON/HTTPS")
+Rel(api_admin, video_admin_controller, "Usa", "JSON/HTTPS")
+Rel(api_admin, user_admin_controller, "Usa", "JSON/HTTPS")
+
+@enduml

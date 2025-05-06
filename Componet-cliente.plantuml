@@ -1,0 +1,48 @@
+@startuml
+
+!include <c4/C4_Component.puml> 
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Component - API Cliente - VídeosON (VO) 2.0
+
+Container(api_cliente, "API Cliente", "Node.js (NestJS)", "Gerencia autenticação, assinaturas e consumo de vídeos pelo cliente.")
+ContainerDb(db, "Banco de Dados", "MySQL", "Armazena usuários, vídeos, históricos e status de assinatura.")
+Container(cache, "Cache", "Redis", "Armazena sessões e acessos rápidos.")
+Container(pagamento_externo, "Serviço de Pagamento", "Stripe / PayPal", "Processamento de cobranças.")
+Container(streaming_externo, "Serviço de Streaming", "YouTube / CDN", "Entrega dos vídeos sob demanda.")
+
+Container_Boundary(api, "API Cliente") {
+
+    Component(auth_controller, "AuthController", "NestJS Controller", "Gerencia login, registro e geração de tokens JWT.")
+    Component(video_controller, "VideoController", "NestJS Controller", "Lista e acessa vídeos disponíveis.")
+    Component(subscription_controller, "SubscriptionController", "NestJS Controller", "Gerencia assinatura, cancelamento e status.")
+    
+    Component(auth_service, "AuthService", "NestJS Service", "Valida credenciais e gera tokens.")
+    Component(video_service, "VideoService", "NestJS Service", "Aplica regras de acesso a vídeos.")
+    Component(subscription_service, "SubscriptionService", "NestJS Service", "Controla planos e comunica com o serviço de pagamento.")
+    
+    Component(streaming_facade, "StreamingFacade", "NestJS Service", "Interface para YouTube/CDN.")
+    Component(payment_facade, "PaymentFacade", "NestJS Service", "Integração com Stripe/PayPal.")
+    
+    Rel(auth_controller, auth_service, "Usa")
+    Rel(video_controller, video_service, "Usa")
+    Rel(subscription_controller, subscription_service, "Usa")
+    
+    Rel(auth_service, db, "Lê/Escreve dados do cliente", "ORM")
+    Rel(video_service, db, "Consulta vídeos e histórico", "ORM")
+    Rel(subscription_service, db, "Gerencia status da assinatura", "ORM")
+    
+    Rel(auth_service, cache, "Armazena sessões", "Redis")
+    Rel(video_service, streaming_facade, "Solicita vídeo")
+    Rel(streaming_facade, streaming_externo, "Busca vídeo")
+    
+    Rel(subscription_service, payment_facade, "Chama")
+    Rel(payment_facade, pagamento_externo, "Processa pagamento")
+}
+
+Rel(api_cliente, auth_controller, "Usa", "JSON/HTTPS")
+Rel(api_cliente, video_controller, "Usa", "JSON/HTTPS")
+Rel(api_cliente, subscription_controller, "Usa", "JSON/HTTPS")
+
+@enduml
