@@ -237,3 +237,15 @@ A integração com serviços externos como YouTube e o uso de CDN garantem o des
 - **YouTube/CDN:** Responsável pela entrega de conteúdo em vídeo de forma escalável.
 
 ##  Nível 4: Diagrama de Código
+
+![Texto alternativo da imagem](diagramas/Codigo/Codigo.svg)
+
+*Explicação:*
+#### Fluxo Principal
+Administrador faz login pela Página Web (React).
+A autenticação é feita pela API Administrativa, que gera um JWT.
+Com o token, o administrador acessa a interface administrativa.
+Pode publicar vídeos, que são enviados via FTPS e registrados no banco.
+Pode também remover ou listar vídeos existentes.
+Todas as ações são registradas no monitoramento.
+
